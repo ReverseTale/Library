@@ -69,9 +69,9 @@ set_target_properties(ReverseTale-Library PROPERTIES
 )
 
 install(TARGETS ReverseTale-Library
+	EXPORT ReverseTale-Library-targets
 	RUNTIME DESTINATION bin/Library
   	LIBRARY DESTINATION lib/Library
-  	ARCHIVE DESTINATION lib/Library
- 	EXPORT ReverseTale-Library-targets)
+  	ARCHIVE DESTINATION lib/Library)
 
 install(EXPORT ReverseTale-Library-targets DESTINATION lib/Library)
