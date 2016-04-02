@@ -72,10 +72,29 @@ set_target_properties(ReverseTale-Library PROPERTIES
     INTERFACE_INCLUDE_DIRECTORIES "${THIRD_PARTY_INCLUDE}"
 )
 
+include(CMakePackageConfigHelpers)
+set(config_install_dir lib/cmake/ReverseTale-Library)
+set(version_config ${PROJECT_BINARY_DIR}/ReverseTale-Library-config-version.cmake)
+set(project_config ${PROJECT_BINARY_DIR}/ReverseTale-Library-config.cmake)
+set(targets_export_name ReverseTale-Library-targets)
+
+
+# Generate the version, config and target files into the build directory.
+write_basic_package_version_file(
+  ${version_config}
+  VERSION 0.0.1
+  COMPATIBILITY AnyNewerVersion)
+configure_package_config_file(
+  ${PROJECT_SOURCE_DIR}/config.cmake.in
+  ${project_config}
+  INSTALL_DESTINATION ${config_install_dir})
+export(TARGETS ReverseTale-Library FILE ${PROJECT_BINARY_DIR}/${targets_export_name}.cmake)
+
 install(TARGETS ReverseTale-Library
-	EXPORT ReverseTale-Library-targets
+	EXPORT ${targets_export_name}
 	RUNTIME DESTINATION bin/
   	LIBRARY DESTINATION lib/
   	ARCHIVE DESTINATION lib/)
 
-install(EXPORT ReverseTale-Library-targets DESTINATION lib/cmake/ReversTale-Library)
+install(FILES ${project_config} ${version_config} DESTINATION ${config_install_dir})
+install(EXPORT ${targets_export_name} DESTINATION ${config_install_dir})
