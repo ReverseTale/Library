@@ -11,21 +11,16 @@ set(Library_SOURCES
 )
 
 # ---[ Load dependencies
-find_package(Boost)
-find_package(cppformat)
-
-# ---[ Setup include directories
-if(NOT Boost_FOUND)
-    set(Boost_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/dep/threadpool11/ext/include)
-endif()
+find_package(Boost REQUIRED)
+find_package(cppformat REQUIRED)
 
 set(THIRD_PARTY_INCLUDE
-    ${CMAKE_SOURCE_DIR}/library/include
+    ${PROJECT_SOURCE_DIR}/include
     ${Boost_INCLUDE_DIR}
 )
 
 include_directories(
-    ${CMAKE_BINARY_DIR}
+    ${PROJECT_BINARY_DIR}
     ${THIRD_PARTY_INCLUDE}
 )
 
@@ -71,6 +66,9 @@ set_target_properties(ReverseTale-Library PROPERTIES
 )
 
 install(TARGETS ReverseTale-Library
-	RUNTIME DESTINATION bin
-  	LIBRARY DESTINATION lib
-  	ARCHIVE DESTINATION lib)
+	RUNTIME DESTINATION bin/Library
+  	LIBRARY DESTINATION lib/Library
+  	ARCHIVE DESTINATION lib/Library
+ 	EXPORT ReverseTale-Library-targets)
+
+install(EXPORT ReverseTale-Library-targets DESTINATION lib/Library)
