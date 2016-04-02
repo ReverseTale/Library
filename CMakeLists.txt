@@ -1,8 +1,11 @@
+# ---[ Create project
 project(ReverseTale-Library)
 
+# ---[ Parse all prefixes
 include(cmake-common/Utils.cmake)
 String2List(${CMAKE_PREFIX_PATH} CMAKE_PREFIX_PATH)
 
+# ---[ Find all source and header files
 file(GLOB_RECURSE sources_Crypto    src/Cryptography/*.cpp     include/Cryptography/*.h)
 file(GLOB_RECURSE sources_Tools     src/Tools/*.cpp            include/Tools/*.h)
 file(GLOB_RECURSE sources_Game      src/Game/*.cpp             include/Game/*.h)
@@ -17,6 +20,7 @@ set(Library_SOURCES
 find_package(Boost REQUIRED)
 find_package(cppformat REQUIRED)
 
+# ---[ Setup include directories
 set(THIRD_PARTY_INCLUDE
     ${PROJECT_SOURCE_DIR}/include
     ${Boost_INCLUDE_DIR}
@@ -74,4 +78,4 @@ install(TARGETS ReverseTale-Library
   	LIBRARY DESTINATION lib/
   	ARCHIVE DESTINATION lib/)
 
-install(EXPORT ReverseTale-Library-targets DESTINATION lib/cmake/Library)
+install(EXPORT ReverseTale-Library-targets DESTINATION lib/cmake/ReversTale-Library)
