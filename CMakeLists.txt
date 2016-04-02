@@ -1,5 +1,8 @@
 project(ReverseTale-Library)
 
+include(cmake-common/Utils.cmake)
+String2List(${CMAKE_PREFIX_PATH} CMAKE_PREFIX_PATH)
+
 file(GLOB_RECURSE sources_Crypto    src/Cryptography/*.cpp     include/Cryptography/*.h)
 file(GLOB_RECURSE sources_Tools     src/Tools/*.cpp            include/Tools/*.h)
 file(GLOB_RECURSE sources_Game      src/Game/*.cpp             include/Game/*.h)
