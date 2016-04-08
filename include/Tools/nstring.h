@@ -26,7 +26,7 @@ private:
 
 	public:
 		const int length() { return _tokens.size(); }
-		const char* length(int idx) { return idx < length() ? _tokens[idx].second : -1; }
+		const int length(int idx) { return idx < length() ? _tokens[idx].second : -1; }
 		const char* token(int idx) { return idx < length() ? _tokens[idx].first : nullptr; }
 		const char* operator[](int idx) { return token(idx); }
 		std::string str(int idx) { return std::string(token(idx)); }
