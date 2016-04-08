@@ -21,7 +21,7 @@ namespace Crypto
 				}
 			}
 
-			// len =					// EBP - 0C 
+			// len =					// EBP - 0C
 			std::size_t currentCounter = 0;		// EBP - 10
 			std::size_t lastCounter = 0;		// EBP - 1C
 			bool pair;
@@ -347,12 +347,11 @@ namespace Crypto
 						break;
 				}
 
-				if (decrypted.length() > 0)
+				if (!decrypted.empty())
 				{
-					output.push_back(decrypted);
+					packet = output.back();
 				}
 
-				packet = output.back();
 				return output;
 			}
 		}
@@ -420,7 +419,7 @@ namespace Crypto
 							decrypted << (uint8_t)chr;
 						}
 						break;
-						
+
 					default:
 						for (std::size_t i = 0; i < len; ++i)
 						{
@@ -442,7 +441,7 @@ namespace Crypto
 
 				for (int i = 0; i < packet.tokens(0xFF).length(); ++i)
 				{
-					NString part = packet.tokens()[i];
+					NString part(packet.tokens()[i], packet.tokens().length(i));
 
 					Crypto::Base::Phase2(part);
 					output.push_back(part);

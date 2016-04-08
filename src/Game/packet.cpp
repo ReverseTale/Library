@@ -59,7 +59,7 @@ namespace Net
 			}
 		}
 #endif
-		
+
 		_pool.push_back(packet);
 	}
 
@@ -144,7 +144,7 @@ namespace Net
 		_crypter = crypter;
 		_decrypter = decrypter;
 	}
-	
+
 	Packet& Packet::operator<<(Packet& packet)
 	{
 		return *this << packet._packet;
@@ -152,23 +152,7 @@ namespace Net
 
 	Packet& Packet::operator<<(NString str)
 	{
-		// TODO: Handle \0 in packet while length() < len
-		//_packet << str.get();
-		int initialLen = _packet.length();
-		const char* string = str.get();
-
-		while (_packet.length() - initialLen < str.length())
-		{
-			const char *ptr = string + _packet.length() - initialLen;
-			if (*ptr == 0)
-			{
-				_packet << (char)'\0';
-				++ptr;
-			}
-
-			_packet << ptr;
-		}
-
+		_packet << fmt::BasicStringRef<char>(str.get(), str.length());
 		return *this;
 	}
 
