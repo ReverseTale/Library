@@ -21,14 +21,10 @@ find_package(Boost REQUIRED)
 find_package(cppformat REQUIRED)
 
 # ---[ Setup include directories
-set(THIRD_PARTY_INCLUDE
-    ${PROJECT_SOURCE_DIR}/include
-    ${Boost_INCLUDE_DIR}
-)
-
 include_directories(
     ${PROJECT_BINARY_DIR}
-    ${THIRD_PARTY_INCLUDE}
+	${PROJECT_SOURCE_DIR}/include
+    ${Boost_INCLUDE_DIR}
 )
 
 # ---[ Setup some definitions
@@ -43,11 +39,6 @@ add_library(ReverseTale-Library STATIC ${Library_SOURCES})
 # ---[ Link all third party libraries
 target_link_libraries(ReverseTale-Library
     PUBLIC ${Boost_LIBRARY}
-    PUBLIC cppformat
-)
-
-# ---[ Other projects include dirs
-target_include_directories(ReverseTale-Library
     PUBLIC cppformat
 )
 
@@ -69,7 +60,7 @@ set_target_properties(ReverseTale-Library PROPERTIES
     ARCHIVE_OUTPUT_DIRECTORY_RELEASE ${PROJECT_SOURCE_DIR}/lib
 
     INTERFACE_COMPILE_DEFINITIONS "${DEFINITIONS}"
-    INTERFACE_INCLUDE_DIRECTORIES "${THIRD_PARTY_INCLUDE}"
+    INTERFACE_INCLUDE_DIRECTORIES "$<INSTALL_INTERFACE:include>;${Boost_INCLUDE_DIR}"
 )
 
 include(CMakePackageConfigHelpers)
@@ -98,3 +89,4 @@ install(TARGETS ReverseTale-Library
 
 install(FILES ${project_config} ${version_config} DESTINATION ${config_install_dir})
 install(EXPORT ${targets_export_name} DESTINATION ${config_install_dir})
+install(DIRECTORY ${PROJECT_SOURCE_DIR}/include DESTINATION include/)
