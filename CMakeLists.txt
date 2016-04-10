@@ -89,4 +89,4 @@ install(TARGETS ReverseTale-Library
 
 install(FILES ${project_config} ${version_config} DESTINATION ${config_install_dir})
 install(EXPORT ${targets_export_name} DESTINATION ${config_install_dir})
-install(DIRECTORY ${PROJECT_SOURCE_DIR}/include DESTINATION include/)
+install(DIRECTORY ${PROJECT_SOURCE_DIR}/include DESTINATION ./)
