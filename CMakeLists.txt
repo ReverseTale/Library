@@ -24,7 +24,6 @@ find_package(cppformat REQUIRED)
 include_directories(
     ${PROJECT_BINARY_DIR}
 	${PROJECT_SOURCE_DIR}/include
-    ${Boost_INCLUDE_DIR}
 )
 
 # ---[ Setup some definitions
@@ -47,6 +46,12 @@ if (MSVC)
     target_link_libraries(ReverseTale-Library PUBLIC ws2_32)
 endif()
 
+# ---[ Target include directories
+target_include_directories(ReverseTale-Library
+	PUBLIC ${Boost_INCLUDE_DIR}
+	PUBLIC "$<TARGET_PROPERTY:cppformat,INTERFACE_INCLUDE_DIRECTORIES>"
+)
+
 # ---[ Set C++11 standard
 set_property(TARGET ReverseTale-Library PROPERTY CXX_STANDARD 11)
 target_compile_features(ReverseTale-Library PRIVATE cxx_decltype cxx_nullptr cxx_variadic_templates)
@@ -60,7 +65,7 @@ set_target_properties(ReverseTale-Library PROPERTIES
     ARCHIVE_OUTPUT_DIRECTORY_RELEASE ${PROJECT_SOURCE_DIR}/lib
 
     INTERFACE_COMPILE_DEFINITIONS "${DEFINITIONS}"
-    INTERFACE_INCLUDE_DIRECTORIES "$<INSTALL_INTERFACE:include>;${Boost_INCLUDE_DIR}"
+    INTERFACE_INCLUDE_DIRECTORIES "$<INSTALL_INTERFACE:include>;"
 )
 
 include(CMakePackageConfigHelpers)
