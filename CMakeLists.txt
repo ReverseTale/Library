@@ -38,7 +38,7 @@ add_library(ReverseTale-Library STATIC ${Library_SOURCES})
 # ---[ Link all third party libraries
 target_link_libraries(ReverseTale-Library
     PUBLIC ${Boost_LIBRARY}
-    PUBLIC cppformat
+    PUBLIC "$<TARGET_FILE:cppformat>" # Avoid issues at later stages
 )
 
 # ---[ If windows, add ws2_32 library
