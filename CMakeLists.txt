@@ -50,8 +50,8 @@ endif()
 # ---[ Target include directories
 target_include_directories(ReverseTale-Library
 	PUBLIC ${Boost_INCLUDE_DIR}
-	PUBLIC "$<TARGET_PROPERTY:cppformat,INTERFACE_INCLUDE_DIRECTORIES>"
-	INTERFACE "$<INSTALL_INTERFACE:include>;"
+	INTERFACE "$<TARGET_PROPERTY:cppformat,INTERFACE_INCLUDE_DIRECTORIES>"
+	INTERFACE "$<INSTALL_INTERFACE:include>"
 )
 
 # ---[ Set C++11 standard
