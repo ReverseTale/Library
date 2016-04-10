@@ -43,13 +43,15 @@ target_link_libraries(ReverseTale-Library
 
 # ---[ If windows, add ws2_32 library
 if (MSVC)
-    target_link_libraries(ReverseTale-Library PUBLIC ws2_32)
+	find_library(SOCKET_LIBRARY ws2_32)
+    target_link_libraries(ReverseTale-Library PUBLIC ${SOCKET_LIBRARY})
 endif()
 
 # ---[ Target include directories
 target_include_directories(ReverseTale-Library
 	PUBLIC ${Boost_INCLUDE_DIR}
 	PUBLIC "$<TARGET_PROPERTY:cppformat,INTERFACE_INCLUDE_DIRECTORIES>"
+	INTERFACE "$<INSTALL_INTERFACE:include>;"
 )
 
 # ---[ Set C++11 standard
@@ -65,7 +67,6 @@ set_target_properties(ReverseTale-Library PROPERTIES
     ARCHIVE_OUTPUT_DIRECTORY_RELEASE ${PROJECT_SOURCE_DIR}/lib
 
     INTERFACE_COMPILE_DEFINITIONS "${DEFINITIONS}"
-    INTERFACE_INCLUDE_DIRECTORIES "$<INSTALL_INTERFACE:include>;"
 )
 
 include(CMakePackageConfigHelpers)
