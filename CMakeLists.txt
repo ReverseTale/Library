@@ -47,10 +47,12 @@ if (MSVC)
     target_link_libraries(ReverseTale-Library PUBLIC ${SOCKET_LIBRARY})
 endif()
 
+get_target_property(CPPFORMAT_INCLUDE_DIR cppformat INTERFACE_INCLUDE_DIRECTORIES)
+
 # ---[ Target include directories
 target_include_directories(ReverseTale-Library
 	PUBLIC ${Boost_INCLUDE_DIR}
-	INTERFACE "$<TARGET_PROPERTY:cppformat,INTERFACE_INCLUDE_DIRECTORIES>"
+	PUBLIC ${CPPFORMAT_INCLUDE_DIR}
 	INTERFACE "$<INSTALL_INTERFACE:include>"
 )
 
