@@ -43,7 +43,13 @@ target_link_libraries(ReverseTale-Library
 
 # ---[ If windows, add ws2_32 library
 if (MSVC)
-	find_library(SOCKET_LIBRARY ws2_32)
+	# Somehow it won't work when added as a submodule :/
+	if (NOT ${ReverseTale_DEV})
+		find_library(SOCKET_LIBRARY ws2_32)
+	else()
+		set(SOCKET_LIBRARY ws2_32)
+	endif()
+
     target_link_libraries(ReverseTale-Library PUBLIC ${SOCKET_LIBRARY})
 endif()
 
