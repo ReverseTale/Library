@@ -160,16 +160,35 @@ namespace Net
 	{
 		Packet* packet = gFactory->make(one.type(), one.session());
 
+		bool useOne = one.data().length() > 0;
+		bool useOther = other.data().length() > 0;
+
 		// Commit all packets
-		one.commit();
-		other.commit();
+		if (useOne)
+		{
+			one.commit();
+			one.finish();
+		}
+
+		if (useOther)
+		{
+			other.commit();
+			other.finish();
+		}
 
 		// Add them together
-		*packet << one;
-		*packet << other;
+		if (useOne)
+		{
+			*packet << one;
+		}
 
-		// Force commit
-		packet->forceCommit();
+		if (useOther)
+		{
+			*packet << other;
+		}
+
+		// Force finish
+		packet->forceFinish();
 
 		// Recycle
 		gFactory->recycle(&one);

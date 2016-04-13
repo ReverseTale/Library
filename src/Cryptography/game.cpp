@@ -74,7 +74,7 @@ namespace Crypto
 				{
 					std::size_t currentLen = (currentCounter - lastCounter);
 					std::size_t sequences = (currentLen / 0x7E);
-					for (std::size_t i = 0; i < currentLen; i += 2)
+					for (std::size_t i = 0; i < currentLen; ++i)
 					{
 						if (i == (sequence_counter * 0x7E))
 						{
@@ -90,41 +90,33 @@ namespace Crypto
 							}
 						}
 
-						char ch1 = packet[lastCounter];
+						char ch = packet[lastCounter];
 						++lastCounter;
 
-						char ch2 = packet[lastCounter];
-						++lastCounter;
-
-						switch ((uint8_t)ch1)
+						switch ((uint8_t)ch)
 						{
 							case 0x20:
-								ch1 = 0x1; break;
+								ch = 0x1; break;
 							case 0x2D:
-								ch1 = 0x2; break;
+								ch = 0x2; break;
 							case 0x2E:
-								ch1 = 0x3; break;
+								ch = 0x3; break;
 							case 0xFF:
-								ch1 = 0xE; break;
+								ch = 0xE; break;
 							default:
-								ch1 -= 0x2C; break;
+								ch -= 0x2C; break;
 						}
 
-						switch ((uint8_t)ch2)
+						if (pair)
 						{
-						case 0x20:
-							ch2 = 0x1; break;
-						case 0x2D:
-							ch2 = 0x2; break;
-						case 0x2E:
-							ch2 = 0x3; break;
-						case 0xFF:
-							ch2 = 0xE; break;
-						default:
-							ch2 -= 0x2C; break;
+							phase1 << (uint8_t)(ch << 4);
+						}
+						else
+						{
+							phase1.back() |= ch;
 						}
 
-						phase1 << (uint8_t)((ch1 << 4) | ch2);
+						pair = !pair;
 					}
 				}
 			}

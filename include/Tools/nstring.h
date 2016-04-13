@@ -139,9 +139,6 @@ public:
 		return *this;
 	}
 
-	// 11 | 0x80 --> 8B [uint8_t = unsigned char]
-	// (char)8B ---> -B
-
 	Tokenizer& tokens(uint8_t delimiter = ' ');
 
 private:

@@ -75,6 +75,7 @@ namespace Net
 		virtual ~Packet();
 
 		void forceCommit() { _isCommitted = true; }
+		void forceFinish() { _isCommitted = true; _isFinished = true; }
 		void commit();
 		void finish();
 		void send(Socket* socket);
