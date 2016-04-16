@@ -42,7 +42,7 @@ namespace Utils
 
 			uint16_t alive();
 			bool check_alive(std::string& alive);
-			NString next_alive();
+			inline uint16_t peek_alive() { return _alive; }
 
 			inline uint32_t id() { return _idHex; }
 			inline uint8_t number() { return _number; }

@@ -27,14 +27,12 @@ namespace Utils
 
 		void Session::setAlive(uint16_t alive)
 		{
-			_alive = alive - 1; // -1, it will be incremented on next call
+			_alive = alive;
 		}
 
 		uint16_t Session::alive()
 		{
-			uint16_t next = _alive + 1;
-			++_alive;
-			return next;
+			return ++_alive;
 		}
 
 		bool Session::check_alive(std::string& alive)
@@ -46,12 +44,6 @@ namespace Utils
 			}
 
 			return false;
-		}
-
-		NString Session::next_alive()
-		{
-			++_alive;
-			return NString() << _alive;
 		}
 	}
 }
