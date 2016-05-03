@@ -18,7 +18,7 @@ set(Library_SOURCES
 
 # ---[ Load dependencies
 find_package(Boost REQUIRED)
-find_package(cppformat REQUIRED)
+find_package(fmt REQUIRED)
 
 # ---[ Setup include directories
 include_directories(
@@ -38,7 +38,7 @@ add_library(ReverseTale-Library STATIC ${Library_SOURCES})
 # ---[ Link all third party libraries
 target_link_libraries(ReverseTale-Library
     PUBLIC ${Boost_LIBRARY}
-    PUBLIC "$<TARGET_FILE:cppformat>" # Avoid issues at later stages
+    PUBLIC "$<TARGET_FILE:fmt>" # Avoid issues at later stages
 )
 
 # ---[ If windows, add ws2_32 library
@@ -53,7 +53,7 @@ if (MSVC)
     target_link_libraries(ReverseTale-Library PUBLIC ${SOCKET_LIBRARY})
 endif()
 
-get_target_property(CPPFORMAT_INCLUDE_DIR cppformat INTERFACE_INCLUDE_DIRECTORIES)
+get_target_property(CPPFORMAT_INCLUDE_DIR fmt INTERFACE_INCLUDE_DIRECTORIES)
 
 # ---[ Target include directories
 target_include_directories(ReverseTale-Library
@@ -78,10 +78,10 @@ set_target_properties(ReverseTale-Library PROPERTIES
 )
 
 include(CMakePackageConfigHelpers)
-set(config_install_dir lib/cmake/ReverseTale-Library)
-set(version_config ${PROJECT_BINARY_DIR}/ReverseTale-Library-config-version.cmake)
-set(project_config ${PROJECT_BINARY_DIR}/ReverseTale-Library-config.cmake)
-set(targets_export_name ReverseTale-Library-targets)
+set(config_install_dir lib/cmake/reversetale-library)
+set(version_config ${PROJECT_BINARY_DIR}/reversetale-library-config-version.cmake)
+set(project_config ${PROJECT_BINARY_DIR}/reversetale-library-config.cmake)
+set(targets_export_name reversetale-library-targets)
 
 
 # Generate the version, config and target files into the build directory.

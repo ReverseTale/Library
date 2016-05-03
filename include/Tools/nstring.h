@@ -3,7 +3,7 @@
 #include <string>
 #include <iostream>
 #include <vector>
-#include <cppformat/posix.h>
+#include <fmt/posix.h>
 
 
 template<typename T>
