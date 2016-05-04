@@ -339,7 +339,7 @@ namespace Crypto
 						break;
 				}
 
-				if (!decrypted.empty())
+				if (!decrypted.empty() && !output.empty())
 				{
 					packet = output.back();
 				}
