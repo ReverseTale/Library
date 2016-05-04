@@ -74,6 +74,7 @@ namespace Net
 		Packet();
 		virtual ~Packet();
 
+		Packet* clone(Utils::Game::Session* session);
 		void forceCommit() { _isCommitted = true; }
 		void forceFinish() { _isCommitted = true; _isFinished = true; }
 		void commit();

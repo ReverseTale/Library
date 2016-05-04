@@ -52,6 +52,11 @@ NString::~NString()
 	}
 }
 
+NString NString::clone()
+{
+	return NString(_buffer->c_str(), _buffer->size());
+}
+
 NString::Tokenizer& NString::tokens(uint8_t delimiter)
 {
 	if (!_tokenizer->_tokenized)

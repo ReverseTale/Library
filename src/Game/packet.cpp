@@ -145,6 +145,11 @@ namespace Net
 		_decrypter = decrypter;
 	}
 
+	Packet* Packet::clone(Utils::Game::Session* session)
+	{
+		return gFactory->make(_type, session, _packet.clone());
+	}
+
 	Packet& Packet::operator<<(Packet& packet)
 	{
 		return *this << packet._packet;

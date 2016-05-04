@@ -99,6 +99,7 @@ public:
 
 	// Constant attributes
 	// TODO: Getters
+	NString clone();
 	inline const char* get() { return _buffer->c_str(); }
 	inline const std::size_t length() { return _buffer->size(); }
 	inline bool empty() { return length() == 0; }

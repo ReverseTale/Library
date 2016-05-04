@@ -76,6 +76,7 @@ protected:
 	Socket();
 	Socket(int family, int type, int protocol);
 	void setError(SocketError error);
+	inline SocketError lastError() { return _error; }
 
 protected:
 	static int _initialized;
