@@ -73,7 +73,10 @@ bool Socket::setOption(int level, int option, const char* value, int valueLength
 
 NString Socket::recv()
 {
-	assert(_status == SocketStatus::CONNECTED);
+	if (_status == SocketStatus::CONNECTED)
+        {
+		return NString();
+        }
 
 	memset(_buf, 0, 8192);
 	int result = ::recv(_socket, _buf, 8192, 0);
@@ -117,19 +120,22 @@ void Socket::close()
 
 int Socket::send(NString buffer)
 {
-	assert(_status == SocketStatus::CONNECTED || _status == SocketStatus::CLOSING);
-
-	int len = buffer.length();
-	int result = ::send(_socket, buffer.get(), len, 0);
-
-	if (result != len)
+	if (_status == SocketStatus::CONNECTED || _status == SocketStatus::CLOSING)
 	{
-		setError(SocketError::SEND_ERROR);
-	}
-	else if (result == -1)
-	{
-		setError(SocketError::BROKEN_PIPE);
+		int len = buffer.length();
+		int result = ::send(_socket, buffer.get(), len, 0);
+
+		if (result != len)
+		{
+			setError(SocketError::SEND_ERROR);
+		}
+		else if (result == -1)
+		{
+			setError(SocketError::BROKEN_PIPE);
+		}
+
+		return result;
 	}
 
-	return result;
+	return -1;
 }
