@@ -1,30 +1,77 @@
+cmake_minimum_required(VERSION 2.8.0)
+
+# ---[ Includes
+set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake-utils)
+
+# -[ Macros and functions
+include(Configure)
+include(Macros)
+include(External)
+ResetAllTargets()
+
 # ---[ Create project
 project(ReverseTale-Library)
+CreateTarget(TARGET ReverseTale-Library)
 
-# ---[ Parse all prefixes
-include(cmake-common/Utils.cmake)
-String2List(${CMAKE_PREFIX_PATH} CMAKE_PREFIX_PATH)
-
-# ---[ Find all source and header files
-file(GLOB_RECURSE sources_Crypto    src/Cryptography/*.cpp     include/Cryptography/*.h)
-file(GLOB_RECURSE sources_Tools     src/Tools/*.cpp            include/Tools/*.h)
-file(GLOB_RECURSE sources_Game      src/Game/*.cpp             include/Game/*.h)
-
-set(Library_SOURCES
-	${sources_Crypto}
-	${sources_Tools}
-	${sources_Game}
+set(SOURCE_FOLDERS
+	${CMAKE_CURRENT_SOURCE_DIR}/src
+	${CMAKE_CURRENT_SOURCE_DIR}/src/Cryptography
+	${CMAKE_CURRENT_SOURCE_DIR}/src/Tools
+	${CMAKE_CURRENT_SOURCE_DIR}/src/Game
 )
+
+foreach(folder ${SOURCE_FOLDERS})
+	get_filename_component(FOLDER_NAME ${folder} NAME)
+
+	AddToSources(
+		TARGET ReverseTale-Library
+		SRC_PATH ${folder}
+		GLOB_SEARCH ".hpp;.cpp"
+		FOLDER_NAME ${FOLDER_NAME}
+	)
+endforeach()
 
 # ---[ Load dependencies
-find_package(Boost REQUIRED)
 find_package(fmt REQUIRED)
 
+if (USE_SYSTEM_BOOST)
+    find_package(Boost 1.62 REQUIRED)
+    set(BOOST_DEPENDENCIES "")
+
+    AddDependency(
+        TARGET ReverseTale-Library
+        DEPENDENCY Boost
+    )
+else()
+    set(BOOST_DEPENDENCIES
+        # Lockfree dependencies
+        lockfree core config assert static_assert type_traits mpl preprocessor
+        array throw_exception functional align parameter atomic detail
+        utility predef winapi
+    )
+
+    foreach (dep ${BOOST_DEPENDENCIES})
+        RequireExternal(
+            TARGET ReverseTale-Library
+            EXCLUDE
+            SKIP_BUILD
+            SKIP_LINK
+            MODULE "boostorg/${dep}:develop"
+            INC_PATH "include"
+        )
+    endforeach()
+endif()
+
 # ---[ Setup include directories
-include_directories(
-    ${PROJECT_BINARY_DIR}
-	${PROJECT_SOURCE_DIR}/include
+AddToIncludes(
+    TARGET ReverseTale-Library
+    INC_PATH ${CMAKE_CURRENT_SOURCE_DIR}/include
 )
+# AddToIncludes(
+#     TARGET ReverseTale-Library
+#     INC_PATH ${PROJECT_BINARY_DIR}
+# )
+
 
 # ---[ Setup some definitions
 set(DEFINITIONS "")
@@ -32,14 +79,13 @@ if (NOT ${DEBUG})
   set(DEFINITIONS "${DEFINITIONS} NDEBUG=1")
 endif()
 
-# ---[ Add library as static and add dependencies
-add_library(ReverseTale-Library STATIC ${Library_SOURCES})
-
-# ---[ Link all third party libraries
-target_link_libraries(ReverseTale-Library
-    PUBLIC ${Boost_LIBRARY}
-    PUBLIC "$<TARGET_FILE:fmt>" # Avoid issues at later stages
+BuildNow(
+	TARGET ReverseTale-Library
+	DEFINES ${DEFINITIONS}
+	STATIC_LIB
+	OUTPUT_NAME Library
 )
+
 
 # ---[ If windows, add ws2_32 library
 if (MSVC)
@@ -53,30 +99,11 @@ if (MSVC)
     target_link_libraries(ReverseTale-Library PUBLIC ${SOCKET_LIBRARY})
 endif()
 
-get_target_property(CPPFORMAT_INCLUDE_DIR fmt INTERFACE_INCLUDE_DIRECTORIES)
-
-# ---[ Target include directories
-target_include_directories(ReverseTale-Library
-	PUBLIC ${Boost_INCLUDE_DIR}
-	PUBLIC ${CPPFORMAT_INCLUDE_DIR}
-	INTERFACE "$<INSTALL_INTERFACE:include>"
-)
-
 # ---[ Set C++11 standard
 set_property(TARGET ReverseTale-Library PROPERTY CXX_STANDARD 11)
 target_compile_features(ReverseTale-Library PRIVATE cxx_decltype cxx_nullptr cxx_variadic_templates)
 
-# ---[ Setup output directory and include directories
-separate_arguments(THIRD_PARTY_INCLUDE)
-set_target_properties(ReverseTale-Library PROPERTIES
-    OUTPUT_NAME Library
-    ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/lib
-    ARCHIVE_OUTPUT_DIRECTORY_DEBUG ${PROJECT_SOURCE_DIR}/lib
-    ARCHIVE_OUTPUT_DIRECTORY_RELEASE ${PROJECT_SOURCE_DIR}/lib
-
-    INTERFACE_COMPILE_DEFINITIONS "${DEFINITIONS}"
-)
-
+# ---[ Install
 include(CMakePackageConfigHelpers)
 set(config_install_dir lib/cmake/reversetale-library)
 set(version_config ${PROJECT_BINARY_DIR}/reversetale-library-config-version.cmake)
