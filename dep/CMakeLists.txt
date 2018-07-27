@@ -10,6 +10,7 @@
         TARGET ReverseTale-Library
         MODULE "fmtlib/fmt:b64d13a357d3556e54ed92a959baf3a14e2f6078"
         CONFIGURE_ARGUMENTS ${FMT_CONFIGURE}
+        INSTALL_NAME fmt
     )
 
 #######################
